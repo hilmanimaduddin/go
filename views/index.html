@@ -1,0 +1,232 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <style>
+      @media only screen and (max-width: 768px) {
+        .bodi {
+          display: block !important;
+        }
+        .bodii {
+          width: auto !important;
+        }
+        .foto {
+          max-width: 300px !important;
+          margin: 0 auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body style="background-color: #c9c9c9">
+    <nav class="navbar navbar-expand-lg bg-light shadow">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img style="width: 30px" src="public/image/logo.png" alt="logo" />
+        </a>
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarTogglerDemo02"
+          aria-controls="navbarTogglerDemo02"
+          aria-expanded="false"
+          aria-label="Toggle Navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link fw-bold active" aria-current="page" href="#"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item fw-bold">
+              <a class="nav-link" aria-current="page" href="/project"
+                >Add Project</a
+              >
+            </li>
+          </ul>
+          <a href="/contact" class="btn bg-dark text-white px-2">Contact Me</a>
+        </div>
+      </div>
+    </nav>
+    <div
+      class="container mt-3 mb-3 rounded bg-light shadow bodi"
+      style="display: flex"
+    >
+      <div class="card-body m-3 bodii" style="width: 50%">
+        <h1 class="card-title mb-2 pt-3">Hi! Welcome to my hut</h1>
+        <p class="card-text pb-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, vel
+          fugiat aperiam in facere mollitia consectetur doloribus ipsum debitis,
+          unde tenetur numquam voluptate quidem laudantium vero nam sint culpa
+          corporis. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Repellat quasi adipisci provident laudantium similique deserunt
+          officiis beatae vel, sed facilis inventore, ipsum quos delectus
+          numquam eaque voluptatem nemo. Eaque, alias.
+        </p>
+        <span><a href="#" class="btn btn-dark pb-2">Contact</a></span>
+        <span
+          ><a href="#" class="link-dark mb-2 link-underline-opacity-0"
+            >download CV <i class="bi bi-download"></i></a
+        ></span>
+        <div style="margin-top: 15px; padding-bottom: 30px">
+          <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="link-dark m-2"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="link-dark m-2"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+      <div class="card m-3 foto" style="width: 300px">
+        <img
+          src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=415&q=80"
+          class="card-img-top"
+          alt="child"
+        />
+        <div class="card-body text-center mb-2">
+          <h5 class="card-title">Joko Santoso</h5>
+          <p class="card-text">Fullstack Developer</p>
+        </div>
+      </div>
+    </div>
+    <div class="">
+      <h1 class="text-center">My Project</h1>
+      <div class="d-flex flex-wrap justify-content-center ms-auto me-auto">
+        <div class="card mycard rounded border m-3" style="width: 18rem">
+          <img
+            src="https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+            alt="cat"
+            class="object-fit-cover p-2"
+          />
+          <a class="link-underline-opacity-0 link-dark" href="/blog-detail/1">
+            <h3 class="ms-2 me-2">Kucing Lagi Maen</h3>
+          </a>
+          <p class="ms-2 me-2">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Reprehenderit neque inventore quibusdam! Praesentium,
+          </p>
+          <div>
+            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="link-dark m-2"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
+          </div>
+          <div class="ms-1 me-1 row">
+            <button class="btn btn-dark col m-2">Edit</button>
+            <button class="btn btn-dark col m-2">Delete</button>
+          </div>
+        </div>
+        <div class="card mycard rounded border m-3" style="width: 18rem">
+          <img
+            src="https://images.unsplash.com/photo-1517331156700-3c241d2b4d83?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=868&q=80"
+            alt="cat"
+            class="object-fit-cover p-2"
+          />
+          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
+          <p class="ms-2 me-2">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Reprehenderit neque inventore quibusdam! Praesentium,
+          </p>
+          <div>
+            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="link-dark m-2"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
+          </div>
+          <div class="ms-1 me-1 row">
+            <button class="btn btn-dark col m-2">Edit</button>
+            <button class="btn btn-dark col m-2">Delete</button>
+          </div>
+        </div>
+        <div class="card mycard rounded border m-3" style="width: 18rem">
+          <img
+            src="https://images.unsplash.com/photo-1606011334315-025e4baab810?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=869&q=80"
+            alt="cat"
+            class="object-fit-cover p-2"
+          />
+          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
+          <p class="ms-2 me-2">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Reprehenderit neque inventore quibusdam! Praesentium,
+          </p>
+          <div>
+            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="link-dark m-2"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
+          </div>
+          <div class="ms-1 me-1 row">
+            <button class="btn btn-dark col m-2">Edit</button>
+            <button class="btn btn-dark col m-2">Delete</button>
+          </div>
+        </div>
+        <div class="card mycard rounded border m-3" style="width: 18rem">
+          <img
+            src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=843&q=80"
+            alt="cat"
+            class="object-fit-cover p-2"
+          />
+          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
+          <p class="ms-2 me-2">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Reprehenderit neque inventore quibusdam! Praesentium,
+          </p>
+          <div>
+            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="link-dark m-2"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
+          </div>
+          <div class="ms-1 me-1 row">
+            <button class="btn btn-dark col m-2">Edit</button>
+            <button class="btn btn-dark col m-2">Delete</button>
+          </div>
+        </div>
+        <div class="card mycard rounded border m-3" style="width: 18rem">
+          <img
+            src="https://images.unsplash.com/photo-1527416876370-fb74d128c3dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+            alt="cat"
+            class="object-fit-cover p-2"
+          />
+          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
+          <p class="ms-2 me-2">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Reprehenderit neque inventore quibusdam! Praesentium,
+          </p>
+          <div>
+            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="link-dark m-2"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
+          </div>
+          <div class="ms-1 me-1 row">
+            <button class="btn btn-dark col m-2">Edit</button>
+            <button class="btn btn-dark col m-2">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
