@@ -13,6 +13,10 @@
       integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
       crossorigin="anonymous"
     />
+    <script
+      src="https://kit.fontawesome.com/d0ff47b7d6.js"
+      crossorigin="anonymous"
+    ></script>
     <style>
       @media only screen and (max-width: 768px) {
         .bodi {
@@ -104,123 +108,74 @@
     <div class="">
       <h1 class="text-center">My Project</h1>
       <div class="d-flex flex-wrap justify-content-center ms-auto me-auto">
+        {{range $index, $data := .Blogs}}
         <div class="card mycard rounded border m-3" style="width: 18rem">
           <img
             src="https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
             alt="cat"
             class="object-fit-cover p-2"
           />
-          <a class="link-underline-opacity-0 link-dark" href="/blog-detail/1">
-            <h3 class="ms-2 me-2">Kucing Lagi Maen</h3>
+          <a
+            class="link-underline-opacity-0 link-dark"
+            href="/blog-detail/{{$index}}"
+          >
+            <h3 class="ms-2 me-2">{{$data.Subject}}</h3>
           </a>
-          <p class="ms-2 me-2">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Reprehenderit neque inventore quibusdam! Praesentium,
+          <p class="ms-3 me-2 mb-0">
+            <i
+              class="fa-solid fa-calendar"
+              style="color: #000000; margin-right: 10px"
+            ></i
+            >{{$data.StartDate}} | {{$data.EndDate}}
           </p>
-          <div>
-            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
+          <p class="ms-3 me-2">
+            <i
+              class="fa-solid fa-clock"
+              style="color: #000000; margin-right: 10px"
+            >
+            </i
+            >{{$data.Month}}
+          </p>
+          <p class="ms-2 me-2">{{$data.Description}}</p>
+          <div class="ms-2">
+            <i
+              class="fa-brands fa-react"
+              style="color: #000000; margin-right: 10px"
+            ></i>
+            <i
+              class="fa-brands fa-square-js"
+              style="color: #000000; margin-right: 10px"
+            ></i>
+            <i
+              class="fa-brands fa-node-js"
+              style="color: #000000; margin-right: 10px"
+            ></i>
+            <i
+              class="fa-solid fa-bolt"
+              style="color: #000000; margin-right: 10px"
+            ></i>
+            <!-- <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
             <a href="#" class="link-dark m-2"
               ><i class="bi bi-instagram"></i
             ></a>
-            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a> -->
           </div>
           <div class="ms-1 me-1 row">
             <button class="btn btn-dark col m-2">Edit</button>
-            <button class="btn btn-dark col m-2">Delete</button>
+            <form
+              action="/blog-delete/{{$index}}"
+              method="post"
+              class="btn btn-dark col m-2"
+            >
+              <input
+                type="submit"
+                class="btn-delete btn-dark btn"
+                value="Delete"
+              />
+            </form>
           </div>
         </div>
-        <div class="card mycard rounded border m-3" style="width: 18rem">
-          <img
-            src="https://images.unsplash.com/photo-1517331156700-3c241d2b4d83?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=868&q=80"
-            alt="cat"
-            class="object-fit-cover p-2"
-          />
-          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
-          <p class="ms-2 me-2">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Reprehenderit neque inventore quibusdam! Praesentium,
-          </p>
-          <div>
-            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
-            <a href="#" class="link-dark m-2"
-              ><i class="bi bi-instagram"></i
-            ></a>
-            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
-          </div>
-          <div class="ms-1 me-1 row">
-            <button class="btn btn-dark col m-2">Edit</button>
-            <button class="btn btn-dark col m-2">Delete</button>
-          </div>
-        </div>
-        <div class="card mycard rounded border m-3" style="width: 18rem">
-          <img
-            src="https://images.unsplash.com/photo-1606011334315-025e4baab810?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=869&q=80"
-            alt="cat"
-            class="object-fit-cover p-2"
-          />
-          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
-          <p class="ms-2 me-2">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Reprehenderit neque inventore quibusdam! Praesentium,
-          </p>
-          <div>
-            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
-            <a href="#" class="link-dark m-2"
-              ><i class="bi bi-instagram"></i
-            ></a>
-            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
-          </div>
-          <div class="ms-1 me-1 row">
-            <button class="btn btn-dark col m-2">Edit</button>
-            <button class="btn btn-dark col m-2">Delete</button>
-          </div>
-        </div>
-        <div class="card mycard rounded border m-3" style="width: 18rem">
-          <img
-            src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=843&q=80"
-            alt="cat"
-            class="object-fit-cover p-2"
-          />
-          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
-          <p class="ms-2 me-2">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Reprehenderit neque inventore quibusdam! Praesentium,
-          </p>
-          <div>
-            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
-            <a href="#" class="link-dark m-2"
-              ><i class="bi bi-instagram"></i
-            ></a>
-            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
-          </div>
-          <div class="ms-1 me-1 row">
-            <button class="btn btn-dark col m-2">Edit</button>
-            <button class="btn btn-dark col m-2">Delete</button>
-          </div>
-        </div>
-        <div class="card mycard rounded border m-3" style="width: 18rem">
-          <img
-            src="https://images.unsplash.com/photo-1527416876370-fb74d128c3dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-            alt="cat"
-            class="object-fit-cover p-2"
-          />
-          <h3 class="ms-2 me-2">Berita Hari Ini</h3>
-          <p class="ms-2 me-2">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Reprehenderit neque inventore quibusdam! Praesentium,
-          </p>
-          <div>
-            <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
-            <a href="#" class="link-dark m-2"
-              ><i class="bi bi-instagram"></i
-            ></a>
-            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a>
-          </div>
-          <div class="ms-1 me-1 row">
-            <button class="btn btn-dark col m-2">Edit</button>
-            <button class="btn btn-dark col m-2">Delete</button>
-          </div>
-        </div>
+        {{end}}
       </div>
     </div>
     <script
