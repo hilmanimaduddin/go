@@ -134,34 +134,24 @@
               style="color: #000000; margin-right: 10px"
             >
             </i
-            >{{$data.Month}}
+            >{{$data.Duration}}
           </p>
           <p class="ms-2 me-2">{{$data.Description}}</p>
           <div class="ms-2">
-            <i
-              class="fa-brands fa-react"
-              style="color: #000000; margin-right: 10px"
-            ></i>
-            <i
-              class="fa-brands fa-square-js"
-              style="color: #000000; margin-right: 10px"
-            ></i>
-            <i
-              class="fa-brands fa-node-js"
-              style="color: #000000; margin-right: 10px"
-            ></i>
-            <i
-              class="fa-solid fa-bolt"
-              style="color: #000000; margin-right: 10px"
-            ></i>
-            <!-- <a href="#" class="link-dark m-2"><i class="bi bi-linkedin"></i></a>
-            <a href="#" class="link-dark m-2"
-              ><i class="bi bi-instagram"></i
-            ></a>
-            <a href="#" class="link-dark m-2"><i class="bi bi-facebook"></i></a> -->
+            {{$data.Icon1}} {{$data.Icon2}} {{$data.Icon3}} {{$data.Icon4}}
           </div>
           <div class="ms-1 me-1 row">
-            <button class="btn btn-dark col m-2">Edit</button>
+            <form
+              action="/update-blog/{{$index}}"
+              method="post"
+              class="btn btn-dark col m-2"
+            >
+              <input
+                type="submit"
+                class="btn-delete btn-dark btn"
+                value="Edit"
+              />
+            </form>
             <form
               action="/blog-delete/{{$index}}"
               method="post"

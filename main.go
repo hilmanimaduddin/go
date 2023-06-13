@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"text/template"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -15,34 +16,51 @@ type Blog struct {
 	EndDate     string
 	Month       string
 	Description string
+	Duration    string
 	checkbox1   bool
 	checkbox2   bool
 	checkbox3   bool
 	checkbox4   bool
+	Icon1       string
+	Icon2       string
+	Icon3       string
+	Icon4       string
+	Myicon1     string
+	Myicon2     string
+	Myicon3     string
+	Myicon4     string
 }
 
 var dataBlog = []Blog{
 	{
 		Subject:     "Kucing Lucu",
-		StartDate:   "5 feb 2023",
-		EndDate:     "5 Mar 2023",
-		Month:       "1 Month",
+		StartDate:   "2023-03-17",
+		EndDate:     "2023-04-18",
+		Duration:    "2 weeks",
 		Description: "Alangkah Indahnya Hari ini",
-		checkbox1:   true,
-		checkbox2:   true,
-		checkbox3:   true,
-		checkbox4:   true,
+		Icon1:       `<i class="fa-brands fa-react"" style="color: #000000; margin-right: 10px"></i>`,
+		Icon2:       `<i class="fa-brands fa-square-js" style="color: #000000; margin-right: 10px"></i>`,
+		Icon3:       `<i class="fa-brands fa-node-js" style="color: #000000; margin-right: 10px"></i>`,
+		Icon4:       `<i class="fa-solid fa-bolt" style="color: #000000; margin-right: 10px"></i>`,
+		Myicon1:     `<i class="fa-brands fa-react"" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`,
+		Myicon2:     `<i class="fa-brands fa-square-js" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`,
+		Myicon3:     `<i class="fa-brands fa-node-js" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`,
+		Myicon4:     `<i class="fa-solid fa-bolt" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`,
 	},
 	{
 		Subject:     "Kucing Comel",
-		StartDate:   "17 Jun 2023",
-		EndDate:     "18 Jul 2023",
-		Month:       "1 Month",
+		StartDate:   "2023-06-04",
+		EndDate:     "2023-08-01",
+		Duration:    "2 months",
 		Description: "Makan Dulu aja... Lagi laper,,",
-		checkbox1:   true,
-		checkbox2:   true,
-		checkbox3:   true,
-		checkbox4:   true,
+		Icon1:       `<i class="fa-brands fa-react"" style="color: #000000; margin-right: 10px"></i>`,
+		Icon2:       `<i class="fa-brands fa-square-js" style="color: #000000; margin-right: 10px"></i>`,
+		Icon3:       `<i class="fa-brands fa-node-js" style="color: #000000; margin-right: 10px"></i>`,
+		Icon4:       `<i class="fa-solid fa-bolt" style="color: #000000; margin-right: 10px"></i>`,
+		Myicon1:     `<i class="fa-brands fa-react"" style="color: #000000; margin-right: 10px"></i><span>Node Js</span>`,
+		Myicon2:     `<i class="fa-brands fa-square-js" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`,
+		Myicon3:     `<i class="fa-brands fa-node-js" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`,
+		Myicon4:     `<i class="fa-solid fa-bolt" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`,
 	},
 }
 
@@ -62,6 +80,7 @@ func main() {
 
 	e.POST("/add-blog", addBlog)
 	e.POST("/blog-delete/:id", deleteBlog)
+	e.POST("/update-blog/:id", editBlog)
 
 	e.Logger.Fatal(e.Start("localhost:5000"))
 }
@@ -100,33 +119,75 @@ func contact(c echo.Context) error {
 	return tmpl.Execute(c.Response(), nil)
 }
 
+func MyIcon(Valu string) string {
+	if Valu == "Node Js " {
+		return `<i class="fa-brands fa-react"" style="color: #000000; margin-right: 10px"></i>`
+	} else if Valu == "React Js " {
+		return `<i class="fa-brands fa-square-js" style="color: #000000; margin-right: 10px"></i>`
+	} else if Valu == "Next Js " {
+		return `<i class="fa-brands fa-node-js" style="color: #000000; margin-right: 10px"></i>`
+	} else if Valu == "TypeScript " {
+		return `<i class="fa-solid fa-bolt" style="color: #000000; margin-right: 10px"></i>`
+	} else {
+		return ""
+	}
+}
+
+func MyLabel(Valu string) string {
+	if Valu == "Node Js " {
+		return `<i class="fa-brands fa-react"" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`
+	} else if Valu == "React Js " {
+		return `<i class="fa-brands fa-square-js" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`
+	} else if Valu == "Next Js " {
+		return `<i class="fa-brands fa-node-js" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`
+	} else if Valu == "TypeScript " {
+		return `<i class="fa-solid fa-bolt" style="color: #000000; margin-right: 10px"></i><span>React Js</span>`
+	} else {
+		return ""
+	}
+}
+
 
 func addBlog(c echo.Context) error {
 	project := c.FormValue("inputProject")
 	startDate := c.FormValue("startDate")
 	endDate := c.FormValue("endDate")
-	checkbox1 := c.FormValue("checkbox1")
-	checkbox2 := c.FormValue("checkbox2")
-	checkbox3 := c.FormValue("checkbox3")
-	checkbox4 := c.FormValue("checkbox4")
 	description := c.FormValue("description")
+	iconA := c.FormValue("icon1")
+	iconB := c.FormValue("icon2")
+	iconC := c.FormValue("icon3")
+	iconD := c.FormValue("icon4")
+	icon1 := MyIcon(iconA)
+	icon2 := MyIcon(iconB)
+	icon3 := MyIcon(iconC)
+	icon4 := MyIcon(iconD)
+	label1 := MyLabel(iconA)
+	label2 := MyLabel(iconB)
+	label3 := MyLabel(iconC)
+	label4 := MyLabel(iconD)
 	// month := ("startDate - endDate")
-	
-	
 	
 
 	println("Project : " + project)
 	println("Start Date : " + startDate)
 	println("End Date : " + endDate)
-	println("Technologies : " + checkbox1 + checkbox2 + checkbox3 + checkbox4)
-	println("Description : " + description)
+	println("Technologies : " + icon1 + icon2 + icon3 + icon4)
+	println("Icon1 : " + icon1)
 
 	var newBlog = Blog{
 		Subject:     project,
 		StartDate:   startDate,
 		EndDate:     endDate,
-		Month:       "1 month",
+		Duration:    getDuration(endDate, startDate),
 		Description: description,
+		Icon1:       icon1,
+		Icon2:       icon2,
+		Icon3:       icon3,
+		Icon4:       icon4,
+		Myicon1:     label1,
+		Myicon2:     label2,
+		Myicon3:     label3,
+		Myicon4:     label4,
 	}
 
 	dataBlog = append(dataBlog, newBlog)
@@ -139,14 +200,6 @@ func addBlog(c echo.Context) error {
 func blogDetail(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	// data := map[string]interface{}{
-	// 	"Id":	    id,
-	// 	"Title":	"Kucing Lagi Maen",
-	// 	"Duration": "19 May 2023 - 19 Jun 2023",
-	// 	"Month":    "1 Month",
-	// 	"Content":	"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veniam porro tenetur maiores in nesciunt, aperiam labore iste corporis officiis hic illum fugiat commodi sit. Ullam eos explicabo delectus aperiam. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat dolore animi amet consequuntur reprehenderit temporibus cupiditate voluptatem, voluptate ducimus? Velit officia, nemo ducimus eius reiciendis illum quia voluptate assumenda iure.",
-	// }
-
 	var blogDetail = Blog{}
 
 	for i, data := range dataBlog {
@@ -155,8 +208,12 @@ func blogDetail(c echo.Context) error {
 				Subject:     data.Subject,
 				StartDate:   data.StartDate,
 				EndDate:     data.EndDate,
-				Month:       "1 Month",
+				Duration:    data.Duration,
 				Description: data.Description,
+				Myicon1:     data.Myicon1,
+				Myicon2:     data.Myicon2,
+				Myicon3:     data.Myicon3,
+				Myicon4:     data.Myicon4,
 			}
 		}
 	}
@@ -173,6 +230,54 @@ func blogDetail(c echo.Context) error {
 
 	return tmpl.Execute(c.Response(), data)
 }
+
+func getDuration(endDate, startDate string) string {
+	startTime, _ := time.Parse("2006-01-02", startDate)
+	endTime, _ := time.Parse("2006-01-02", endDate)
+
+	durationTime := int(endTime.Sub(startTime).Hours())
+	durationDays := durationTime / 24
+	durationWeeks := durationDays / 7
+	durationMonths := durationWeeks / 4
+	durationYears := durationMonths / 12
+
+	var duration string
+
+	if durationYears > 1 {
+		duration = strconv.Itoa(durationYears) + " years"
+	} else if durationYears > 0 {
+		duration = strconv.Itoa(durationYears) + " year"
+	} else {
+		if durationMonths > 1 {
+			duration = strconv.Itoa(durationMonths) + " months"
+		} else if durationMonths > 0 {
+			duration = strconv.Itoa(durationMonths) + " month"
+		} else {
+			if durationWeeks > 1 {
+				duration = strconv.Itoa(durationWeeks) + " weeks"
+			} else if durationWeeks > 0 {
+				duration = strconv.Itoa(durationWeeks) + " week"
+			} else {
+				if durationDays > 1 {
+					duration = strconv.Itoa(durationDays) + " days"
+				} else {
+					duration = strconv.Itoa(durationDays) + " day"
+				}
+			}
+		}
+	}
+
+	return duration
+}
+
+func editBlog(edit echo.Context) error {
+	id, _ := strconv.Atoi(edit.Param("id"))
+	fmt.Println("index : ", id)
+
+	dataBlog = append(dataBlog[:id], dataBlog[id+1:]...)
+	return edit.Redirect(http.StatusMovedPermanently, "/project")
+}
+
 
 func deleteBlog(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
