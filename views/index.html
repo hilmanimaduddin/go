@@ -62,10 +62,55 @@
               >
             </li>
           </ul>
+          {{if .DataSession.IsLogin}}
+          <a
+            href="#"
+            class="me-2 mb-2 mt-2 fw-bold nav-link"
+            style="text-decoration: none; color: black"
+            >Hello, {{.DataSession.Name}}</a
+          >
+          <form id="myform" action="/logout" method="POST"></form>
+          <button
+            onclick="document.getElementById('myform').submit()"
+            class="btn-auth me-2 mb-2 mt-2 fw-bold nav-link"
+          >
+            Logout
+          </button>
+          {{else}}
+          <a href="/register" class="btn-auth me-2 mb-2 mt-2 fw-bold nav-link"
+            >Register</a
+          >
+          <a href="/login" class="btn-auth me-2 mb-2 mt-2 fw-bold nav-link"
+            >Login</a
+          >
+          {{end}}
           <a href="/contact" class="btn bg-dark text-white px-2">Contact Me</a>
         </div>
       </div>
     </nav>
+
+    {{if .FlashMessage}} {{if .FlashStatus}}
+    <div class="alert alert-success alert-dismissable fade show" role="alert">
+      <strong>{{.FlashMessage}}</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {{else}}
+    <div class="alert alert-danger alert-dismissable fade show" role="alert">
+      <strong>{{.FlashMessage}}</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {{end}} {{end}}
+
     <div
       class="container mt-3 mb-3 rounded bg-light shadow bodi"
       style="display: flex"

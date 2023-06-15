@@ -42,6 +42,28 @@
               >
             </li>
           </ul>
+          {{if .DataSession.IsLogin}}
+          <a
+            href="#"
+            class="me-2 mb-2 mt-2 fw-bold nav-link"
+            style="text-decoration: none; color: black"
+            >Hello, {{.DataSession.Name}}</a
+          >
+          <form id="myform" action="/logout" method="POST"></form>
+          <button
+            onclick="document.getElementById('myform').submit()"
+            class="btn-auth me-2 mb-2 mt-2 fw-bold nav-link"
+          >
+            Logout
+          </button>
+          {{else}}
+          <a href="/register" class="btn-auth me-2 mb-2 mt-2 fw-bold nav-link"
+            >Register</a
+          >
+          <a href="/login" class="btn-auth me-2 mb-2 mt-2 fw-bold nav-link"
+            >Login</a
+          >
+          {{end}}
           <a href="#" class="btn bg-dark text-white px-2">Contact Me</a>
         </div>
       </div>

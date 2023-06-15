@@ -46,34 +46,22 @@
         </div>
       </div>
     </nav>
-    {{if .FlashMessage}} {{if .FlashStatus}}
-    <div class="alert alert-success alert-dismissable fade show" role="alert">
-      <strong>{{.FlashMessage}}</strong>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
-    {{else}}
-    <div class="alert alert-danger alert-dismissable fade show" role="alert">
-      <strong>{{.FlashMessage}}</strong>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
-    {{end}} {{end}}
-
     <div
       class="container-fluid d-flex justify-content-center align-items-center"
     >
       <div class="container-form">
-        <h2 class="mb-3 text-center">Form Login</h2>
-        <form action="/log" method="POST">
+        <h2 class="mb-3 text-center">Form Register</h2>
+        <form action="/reg" method="POST">
+          <div class="mb-3">
+            <label for="inputName" class="form-label">Name</label>
+            <input
+              type="text"
+              name="inputName"
+              id="inputName"
+              class="form-control"
+              required
+            />
+          </div>
           <div class="mb-3">
             <label for="inputEmail" class="form-label">Email</label>
             <input
@@ -95,7 +83,7 @@
             />
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button class="btn bg-orange text-white">Login</button>
+            <button class="btn bg-orange text-white">Register</button>
           </div>
         </form>
       </div>
