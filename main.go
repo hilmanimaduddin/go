@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"go/connection"
 	"net/http"
 	"strconv"
 	"text/template"
@@ -11,16 +13,13 @@ import (
 )
 
 type Blog struct {
+	ID          int
 	Subject     string
 	StartDate   string
 	EndDate     string
-	Month       string
 	Description string
+	Image       string
 	Duration    string
-	checkbox1   bool
-	checkbox2   bool
-	checkbox3   bool
-	checkbox4   bool
 	Icon1       string
 	Icon2       string
 	Icon3       string
@@ -65,6 +64,8 @@ var dataBlog = []Blog{
 }
 
 func main() {
+	connection.DatabaseConnect()
+
 	e := echo.New()
 
 	// e.GET("/", func(c echo.Context) error {
@@ -86,15 +87,42 @@ func main() {
 }
 
 func home(c echo.Context) error {
+	data, _ := connection.Conn.Query(context.Background(), "SELECT id, subject, startdate, enddate, description FROM tb_projek")
+
+	var result []Blog
+	for data.Next() {
+		var each = Blog{}
+
+		err := data.Scan(&each.ID, &each.Subject, &each.StartDate, &each.EndDate, &each.Description)
+		if err != nil {
+			fmt.Println(err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]string{"Message": err.Error()})
+		}
+
+		each.Duration = "2 Months"
+		each.Image = ""
+		each.Icon1 = ""
+		each.Icon2 = ""
+		each.Icon3 = ""
+		each.Icon4 = ""
+		each.Myicon1 = ""
+		each.Myicon2 = ""
+		each.Myicon3 = ""
+		each.Myicon4 = ""
+
+		result = append(result, each)
+	}
+	
+	blogs := map[string]interface{}{
+		"Blogs": result,
+	}
+
 	var tmpl, err = template.ParseFiles("views/index.html")
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
 	}
 
-	blogs := map[string]interface{}{
-		"Blogs": dataBlog,
-	}
 
 	return tmpl.Execute(c.Response(), blogs)
 }
