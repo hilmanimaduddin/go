@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go/connection"
+	"go/middleware"
 	"log"
 	"net/http"
 	"strconv"
@@ -94,6 +95,7 @@ func main() {
 	// })
 
 	e.Static("/public", "public")
+	e.Static("/uploads", "uploads")
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("session"))))
 
@@ -109,7 +111,7 @@ func main() {
 
 	e.POST("/logout", logout)
 
-	e.POST("/add-blog", addBlog)
+	e.POST("/add-blog", middleware.UploadFile(addBlog))
 	e.POST("/blog-delete/:id", deleteBlog)
 	e.POST("/update-blog/:id", editBlog)
 
@@ -117,19 +119,17 @@ func main() {
 }
 
 func home(c echo.Context) error {
-	data, _ := connection.Conn.Query(context.Background(), "SELECT id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration FROM tb_projek")
+	data, _ := connection.Conn.Query(context.Background(), "SELECT id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration, image FROM tb_projects")
 
 	var result []Blog
 	for data.Next() {
 		var each = Blog{}
 
-		err := data.Scan(&each.ID, &each.Subject, &each.StartDate, &each.EndDate, &each.Description, &each.Icon1, &each.Icon2, &each.Icon3, &each.Icon4, &each.Myicon1, &each.Myicon2, &each.Myicon3, &each.Myicon4, &each.Duration)
+		err := data.Scan(&each.ID, &each.Subject, &each.StartDate, &each.EndDate, &each.Description, &each.Icon1, &each.Icon2, &each.Icon3, &each.Icon4, &each.Myicon1, &each.Myicon2, &each.Myicon3, &each.Myicon4, &each.Duration, &each.Image)
 		if err != nil {
 			fmt.Println(err.Error())
 			return c.JSON(http.StatusInternalServerError, map[string]string{"Message": err.Error()})
 		}
-
-		each.Image = ""
 
 		each.FormatStartDate = each.StartDate.Format("2 January 2006")
 		each.FormatEndDate = each.EndDate.Format("2 January 2006")
@@ -149,7 +149,6 @@ func home(c echo.Context) error {
 	}
 
 	datas := map[string]interface{}{
-		"Exp":          result,
 		"FlashStatus":  sess.Values["status"],
 		"FlashMessage": sess.Values["message"],
 		"DataSession":  userData,
@@ -258,7 +257,6 @@ func MyLabel(Valu string) string {
 	}
 }
 
-
 func addBlog(c echo.Context) error {
 	subject := c.FormValue("inputProject")
 	startDate := c.FormValue("startDate")
@@ -277,9 +275,10 @@ func addBlog(c echo.Context) error {
 	label2 := MyLabel(iconB)
 	label3 := MyLabel(iconC)
 	label4 := MyLabel(iconD)
-	// month := ("startDate - endDate")
 
-	_, err := connection.Conn.Exec(context.Background(), "INSERT INTO tb_projek (subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)", subject, startDate, endDate, description, icon1, icon2, icon3, icon4, label1, label2, label3, label4, duration)
+	image := c.Get("dataFile").(string)
+
+	_, err := connection.Conn.Exec(context.Background(), "INSERT INTO tb_projects (subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", subject, startDate, endDate, description, icon1, icon2, icon3, icon4, label1, label2, label3, label4, duration, image)
 
 
 	if err != nil {
@@ -295,8 +294,8 @@ func blogDetail(c echo.Context) error {
 
 	var BlogDetail = Blog{}
 
-	err := connection.Conn.QueryRow(context.Background(), "SELECT id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration FROM tb_projek WHERE id=$1", id).Scan(
-		&BlogDetail.ID, &BlogDetail.Subject, &BlogDetail.StartDate, &BlogDetail.EndDate, &BlogDetail.Description, &BlogDetail.Icon1, &BlogDetail.Icon2, &BlogDetail.Icon3, &BlogDetail.Icon4, &BlogDetail.Myicon1, &BlogDetail.Myicon2, &BlogDetail.Myicon3, &BlogDetail.Myicon4, &BlogDetail.Duration)
+	err := connection.Conn.QueryRow(context.Background(), "SELECT id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration, image FROM tb_projects WHERE id=$1", id).Scan(
+		&BlogDetail.ID, &BlogDetail.Subject, &BlogDetail.StartDate, &BlogDetail.EndDate, &BlogDetail.Description, &BlogDetail.Icon1, &BlogDetail.Icon2, &BlogDetail.Icon3, &BlogDetail.Icon4, &BlogDetail.Myicon1, &BlogDetail.Myicon2, &BlogDetail.Myicon3, &BlogDetail.Myicon4, &BlogDetail.Duration, &BlogDetail.Image)
 
 
 	if err != nil {
@@ -305,8 +304,6 @@ func blogDetail(c echo.Context) error {
 
 	BlogDetail.FormatStartDate = BlogDetail.StartDate.Format("2 January 2006")
 	BlogDetail.FormatEndDate = BlogDetail.EndDate.Format("2 January 2006")
-
-	BlogDetail.Image = ""
 
 	sess, _ := session.Get("session", c)
 
@@ -383,7 +380,7 @@ func editBlog(edit echo.Context) error {
 
 	fmt.Println("ID: ", id)
 
-	_, err := connection.Conn.Exec(context.Background(), "DELETE FROM tb_projek WHERE id=$1", id)
+	_, err := connection.Conn.Exec(context.Background(), "DELETE FROM tb_projects WHERE id=$1", id)
 
 	if err != nil {
 		return edit.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
@@ -398,7 +395,7 @@ func deleteBlog(c echo.Context) error {
 
 	fmt.Println("ID: ", id)
 
-	_, err := connection.Conn.Exec(context.Background(), "DELETE FROM tb_projek WHERE id=$1", id)
+	_, err := connection.Conn.Exec(context.Background(), "DELETE FROM tb_projects WHERE id=$1", id)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
@@ -429,7 +426,7 @@ func register(c echo.Context) error {
 
 	passwordHash, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
 
-	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_user(name, email, password) VALUES ($1, $2, $3)", name, email, passwordHash)
+	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_users(name, email, password) VALUES ($1, $2, $3)", name, email, passwordHash)
 
 	if err != nil {
 		redirectWithMessage(c, "Register failed, please try again.", false, "/register")
@@ -468,7 +465,7 @@ func login(c echo.Context) error {
 	password := c.FormValue("inputPassword")
 
 	user := User{}
-	err = connection.Conn.QueryRow(context.Background(), "SELECT * FROM tb_user WHERE email=$1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
+	err = connection.Conn.QueryRow(context.Background(), "SELECT * FROM tb_users WHERE email=$1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
 
 	if err != nil {
 		return redirectWithMessage(c, "Email Incorrect!", false, "/login")
