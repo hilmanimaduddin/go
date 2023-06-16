@@ -77,7 +77,7 @@
       method="post"
       class="ms-auto me-auto fw-bold container"
       style="max-width: 500px"
-      onsubmit="addBlog(event)"
+      enctype="multipart/form-data"
     >
       <h1 class="text-center m-3">Add My Project</h1>
       <div>
@@ -173,8 +173,13 @@
         >
       </div>
       <div class="mb-3">
-        <label for="upload-image" class="form-label">Input Image</label>
-        <input class="form-control shadow" type="file" id="upload-image" />
+        <label for="inputImage" class="form-label">Input Image</label>
+        <input
+          class="form-control shadow"
+          name="inputImage"
+          type="file"
+          id="inputImage"
+        />
       </div>
       <button type="submit" class="btn btn-dark mb-3 float-end">Submit</button>
     </form>

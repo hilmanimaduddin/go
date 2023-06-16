@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go/connection"
+	"go/middleware"
 	"log"
 	"net/http"
 	"strconv"
@@ -34,6 +35,7 @@ type Blog struct {
 	Myicon4     string
 	FormatStartDate  string
 	FormatEndDate  string
+	Author      string
 }
 
 
@@ -94,6 +96,7 @@ func main() {
 	// })
 
 	e.Static("/public", "public")
+	e.Static("/uploads", "uploads")
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("session"))))
 
@@ -109,27 +112,26 @@ func main() {
 
 	e.POST("/logout", logout)
 
-	e.POST("/add-blog", addBlog)
+	e.POST("/add-blog", middleware.UploadFile(addBlog))
 	e.POST("/blog-delete/:id", deleteBlog)
 	e.POST("/update-blog/:id", editBlog)
 
-	e.Logger.Fatal(e.Start("localhost:5000"))
+	e.Logger.Fatal(e.Start("localhost:5400"))
 }
 
 func home(c echo.Context) error {
-	data, _ := connection.Conn.Query(context.Background(), "SELECT id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration FROM tb_projek")
+	data, _ := connection.Conn.Query(context.Background(), "SELECT tb_projek.id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration, image, tb_user.name AS author FROM tb_projek JOIN tb_user ON tb_projek.author_id = tb_user.id ORDER BY tb_projek.id DESC")
+
 
 	var result []Blog
 	for data.Next() {
 		var each = Blog{}
 
-		err := data.Scan(&each.ID, &each.Subject, &each.StartDate, &each.EndDate, &each.Description, &each.Icon1, &each.Icon2, &each.Icon3, &each.Icon4, &each.Myicon1, &each.Myicon2, &each.Myicon3, &each.Myicon4, &each.Duration)
+		err := data.Scan(&each.ID, &each.Subject, &each.StartDate, &each.EndDate, &each.Description, &each.Icon1, &each.Icon2, &each.Icon3, &each.Icon4, &each.Myicon1, &each.Myicon2, &each.Myicon3, &each.Myicon4, &each.Duration, &each.Image, &each.Author)
 		if err != nil {
 			fmt.Println(err.Error())
 			return c.JSON(http.StatusInternalServerError, map[string]string{"Message": err.Error()})
 		}
-
-		each.Image = ""
 
 		each.FormatStartDate = each.StartDate.Format("2 January 2006")
 		each.FormatEndDate = each.EndDate.Format("2 January 2006")
@@ -149,7 +151,6 @@ func home(c echo.Context) error {
 	}
 
 	datas := map[string]interface{}{
-		"Exp":          result,
 		"FlashStatus":  sess.Values["status"],
 		"FlashMessage": sess.Values["message"],
 		"DataSession":  userData,
@@ -258,7 +259,6 @@ func MyLabel(Valu string) string {
 	}
 }
 
-
 func addBlog(c echo.Context) error {
 	subject := c.FormValue("inputProject")
 	startDate := c.FormValue("startDate")
@@ -277,9 +277,13 @@ func addBlog(c echo.Context) error {
 	label2 := MyLabel(iconB)
 	label3 := MyLabel(iconC)
 	label4 := MyLabel(iconD)
-	// month := ("startDate - endDate")
 
-	_, err := connection.Conn.Exec(context.Background(), "INSERT INTO tb_projek (subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)", subject, startDate, endDate, description, icon1, icon2, icon3, icon4, label1, label2, label3, label4, duration)
+	sess, _ := session.Get("session", c)
+	author := sess.Values["id"].(int)
+
+	image := c.Get("dataFile").(string)
+
+	_, err := connection.Conn.Exec(context.Background(), "INSERT INTO tb_projek (subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration, image, author_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)", subject, startDate, endDate, description, icon1, icon2, icon3, icon4, label1, label2, label3, label4, duration, image, author)
 
 
 	if err != nil {
@@ -295,8 +299,8 @@ func blogDetail(c echo.Context) error {
 
 	var BlogDetail = Blog{}
 
-	err := connection.Conn.QueryRow(context.Background(), "SELECT id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration FROM tb_projek WHERE id=$1", id).Scan(
-		&BlogDetail.ID, &BlogDetail.Subject, &BlogDetail.StartDate, &BlogDetail.EndDate, &BlogDetail.Description, &BlogDetail.Icon1, &BlogDetail.Icon2, &BlogDetail.Icon3, &BlogDetail.Icon4, &BlogDetail.Myicon1, &BlogDetail.Myicon2, &BlogDetail.Myicon3, &BlogDetail.Myicon4, &BlogDetail.Duration)
+	err := connection.Conn.QueryRow(context.Background(), "SELECT id, subject, start_date, end_date, description, icon1, icon2, icon3, icon4, myicon1, myicon2, myicon3, myicon4, duration, image FROM tb_projek WHERE id=$1", id).Scan(
+		&BlogDetail.ID, &BlogDetail.Subject, &BlogDetail.StartDate, &BlogDetail.EndDate, &BlogDetail.Description, &BlogDetail.Icon1, &BlogDetail.Icon2, &BlogDetail.Icon3, &BlogDetail.Icon4, &BlogDetail.Myicon1, &BlogDetail.Myicon2, &BlogDetail.Myicon3, &BlogDetail.Myicon4, &BlogDetail.Duration, &BlogDetail.Image)
 
 
 	if err != nil {
@@ -305,8 +309,6 @@ func blogDetail(c echo.Context) error {
 
 	BlogDetail.FormatStartDate = BlogDetail.StartDate.Format("2 January 2006")
 	BlogDetail.FormatEndDate = BlogDetail.EndDate.Format("2 January 2006")
-
-	BlogDetail.Image = ""
 
 	sess, _ := session.Get("session", c)
 

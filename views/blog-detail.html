@@ -52,9 +52,15 @@
               <a class="nav-link fw-bold" aria-current="page" href="/">Home</a>
             </li>
             <li class="nav-item fw-bold">
+              {{if .DataSession.IsLogin}}
               <a class="nav-link" aria-current="page" href="/project"
                 >Add Project</a
               >
+              {{else}}
+              <a class="nav-link" aria-current="page" href="/login"
+                >Add Project</a
+              >
+              {{end}}
             </li>
           </ul>
           {{if .DataSession.IsLogin}}
@@ -91,7 +97,7 @@
           <img
             class="object-fit-cover foto col"
             style="width: 50%"
-            src="https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+            src="/uploads/{{.Blog.Image}}"
             alt="blog_detail"
           />
           <div class="col mt-auto mb-auto">
